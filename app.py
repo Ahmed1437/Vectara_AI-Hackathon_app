@@ -1,3 +1,13 @@
+import os
+import streamlit as st
+
+st.set_page_config(
+    page_title="Cloudilic BOT",
+    page_icon="./logo/logo.jpg",
+    initial_sidebar_state="auto",
+)
+st.sidebar.image("./logo/logo.jpg", width=250)
+
 def hhem_score(input_list):
     """
     HHEM (Hughes Hallucination Evaluation Model) Function.
@@ -31,7 +41,6 @@ def Chatbot_Vectara_RAG(query, file_path, chat_history, temperature, model_selec
     """
     # imports
     
-    import os
     import openai
     from langchain_openai import ChatOpenAI
     from langchain_community.chat_models.fireworks import ChatFireworks
@@ -89,8 +98,7 @@ def Chatbot_Vectara_RAG(query, file_path, chat_history, temperature, model_selec
     
     return result, similarity_search_result[0]
 
-import os
-import streamlit as st
+
 import tempfile
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 
