@@ -3,10 +3,10 @@ import streamlit as st
 
 st.set_page_config(
     page_title="Cloudilic BOT",
-    page_icon="./logo/logo.png",
+    page_icon="./logo/CLOUDILIC.png",
     initial_sidebar_state="auto",
 )
-st.sidebar.image("./logo/logo.png", width=250)
+st.sidebar.image("./logo/widelogo.png", width=250)
 
 def hhem_score(input_list):
     """
