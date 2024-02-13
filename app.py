@@ -32,6 +32,7 @@ def Chatbot_Vectara_RAG(query, file_path, chat_history, temperature, model_selec
     # imports
     
     import os
+    import openai
     from langchain_openai import ChatOpenAI
     from langchain_community.chat_models.fireworks import ChatFireworks
     # from langchain_google_genai import ChatGoogleGenerativeAI
@@ -45,6 +46,7 @@ def Chatbot_Vectara_RAG(query, file_path, chat_history, temperature, model_selec
     fireworks_api_key = st.secrets["FIREWORKS_API_KEY"]
 
     openai_api_key = st.secrets["OPENAI_API_KEY"]
+    openai.api_key = st.secrets["OPENAI_API_KEY"]
     
     vectara_customer_id = st.secrets["VECTARA_CUSTOMER_ID"]
     vectara_corpus_id = st.secrets["VECTARA_CORPUS_ID"]
