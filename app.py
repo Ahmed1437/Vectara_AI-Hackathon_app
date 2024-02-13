@@ -3,7 +3,7 @@ import streamlit as st
 
 st.set_page_config(
     page_title="Cloudilic BOT",
-    page_icon="./logo/CLOUDILIC_logo.svg",
+    page_icon="./logo/CLOUDILIC_icon.svg",
     initial_sidebar_state="auto",
 )
 st.sidebar.image("./logo/CLOUDILIC_logo.svg", width=250)
