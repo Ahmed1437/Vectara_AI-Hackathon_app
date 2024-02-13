@@ -33,7 +33,7 @@ def Chatbot_Vectara_RAG(query, file_path, chat_history, temperature, model_selec
     
     import os
     from langchain_openai import ChatOpenAI
-    from langchain_community.llms.fireworks import Fireworks
+    from langchain_community.chat_models.fireworks import ChatFireworks
     # from langchain_google_genai import ChatGoogleGenerativeAI
     from langchain_community.vectorstores import Vectara
     from langchain_community.document_loaders import PyMuPDFLoader
@@ -42,35 +42,40 @@ def Chatbot_Vectara_RAG(query, file_path, chat_history, temperature, model_selec
     
     #environment keys
     
-    os.environ["FIREWORKS_API_KEY"] = st.secrets["FIREWORKS_API_KEY"]
+    fireworks_api_key = st.secrets["FIREWORKS_API_KEY"]
 
-    os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
+    openai_api_key = st.secrets["OPENAI_API_KEY"]
     
-    os.environ["VECTARA_CUSTOMER_ID"] = st.secrets["VECTARA_CUSTOMER_ID"]
-    os.environ["VECTARA_CORPUS_ID"] = st.secrets["VECTARA_CORPUS_ID"]
-    os.environ["VECTARA_API_KEY"] = st.secrets["VECTARA_API_KEY"]
+    vectara_customer_id = st.secrets["VECTARA_CUSTOMER_ID"]
+    vectara_corpus_id = st.secrets["VECTARA_CORPUS_ID"]
+    vectara_api_key = st.secrets["VECTARA_API_KEY"]
     
     # file load
     
     loader = PyMuPDFLoader(file_path)
     documents = loader.load()
     
-    vectara = Vectara.from_documents(documents, embedding=None)
+    vectara = Vectara(
+                vectara_customer_id=vectara_customer_id,
+                vectara_corpus_id=vectara_corpus_id,
+                vectara_api_key=vectara_api_key
+            )
+    vs = Vectara.from_documents(documents, embedding=None)
     similarity_search_result = vectara.similarity_search_with_score(query)
     # print(similarity_search_result)
     memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
     
     # choose model based on UI
     if model_selection == "OpenAI: GPT 3.5":        
-        llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=temperature)
+        llm = ChatOpenAI(openai_api_key=openai_api_key, model_name="gpt-3.5-turbo", temperature=temperature)
     elif model_selection == "LLama 2: 70B":
         # llm = Anyscale(model_name="meta-llama/Llama-2-70b-chat-hf", temperature=temperature)
-        llm = Fireworks(model="accounts/fireworks/models/llama-v2-70b-chat", temperature=temperature)
+        llm = ChatFireworks(fireworks_api_key=fireworks_api_key,model="accounts/fireworks/models/llama-v2-70b-chat", temperature=temperature)
     # elif model_selection == "Gemini Pro":
     #     llm = ChatGoogleGenerativeAI(model="gemini-pro", temperature=temperature, convert_system_message_to_human=True)
         
         
-    retriever = vectara.as_retriever()
+    retriever = vs.as_retriever()
 
     bot = ConversationalRetrievalChain.from_llm(
         llm, retriever, memory=memory, verbose=False
