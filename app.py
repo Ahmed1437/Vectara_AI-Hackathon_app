@@ -40,6 +40,16 @@ def Chatbot_Vectara_RAG(query, file_path, chat_history, temperature, model_selec
     from langchain.memory import ConversationBufferMemory
     from langchain.chains import ConversationalRetrievalChain
     
+    #environment keys
+    
+    os.environ["FIREWORKS_API_KEY"] = st.secrets["FIREWORKS_API_KEY"]
+
+    os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
+    
+    os.environ["VECTARA_CUSTOMER_ID"] = st.secrets["VECTARA_CUSTOMER_ID"]
+    os.environ["VECTARA_CORPUS_ID"] = st.secrets["VECTARA_CORPUS_ID"]
+    os.environ["VECTARA_API_KEY"] = st.secrets["VECTARA_API_KEY"]
+    
     # file load
     
     loader = PyMuPDFLoader(file_path)
